@@ -1,11 +1,3 @@
-// Initialize selected template
-let selectedTemplate = 'template1';
-
-// Navigation to Resume Builder
-function startResumeBuilder() {
-    window.location.href = "resume-builder.html";
-}
-
 // Add Skill
 function addSkill() {
     const skillsSection = document.getElementById('skills');
@@ -41,7 +33,6 @@ function addEducation() {
     degreeInput.type = 'text';
     degreeInput.placeholder = 'Degree';
     const institutionInput = document.createElement('input');
-    institutionInput.type = 'text';
     institutionInput.placeholder = 'Institution';
 
     educationSection.appendChild(degreeInput);
@@ -51,14 +42,6 @@ function addEducation() {
     institutionInput.addEventListener('input', updatePreview);
 }
 
-// Select Template and Apply Style to Preview
-function selectTemplate(template) {
-    selectedTemplate = template;
-    const previewElement = document.getElementById('resume-preview');
-    previewElement.className = '';
-    previewElement.classList.add(`${template}-preview`);
-}
-
 // Update Preview Content
 function updatePreview() {
     document.getElementById('preview-name').textContent = document.getElementById('name').value;
@@ -66,17 +49,23 @@ function updatePreview() {
     document.getElementById('preview-contact').textContent = document.getElementById('contact').value;
     document.getElementById('preview-careerObjective').textContent = document.getElementById('careerObjective').value;
 
-    const skillInputs = document.querySelectorAll('#skills .skill-input');
-    const previewSkills = document.getElementById('preview-skills');
-    previewSkills.innerHTML = '';
-    skillInputs.forEach(input => {
-        if (input.value) {
-            const li = document.createElement('li');
-            li.textContent = input.value;
-            previewSkills.appendChild(li);
-        }
-    });
+  
+    
+    
 
+// Update Skills
+const skillInputs = document.querySelectorAll('#skills .skill-input');
+const previewSkills = document.getElementById('preview-skills');
+previewSkills.innerHTML = '';
+skillInputs.forEach(input => {
+    if (input.value) {
+        const li = document.createElement('li');
+        li.textContent = input.value;
+        previewSkills.appendChild(li);
+    }
+});
+
+    // Update Experience
     const experienceInputs = document.querySelectorAll('#experiences input, #experiences textarea');
     const previewExperience = document.getElementById('preview-experience');
     previewExperience.innerHTML = '';
@@ -90,6 +79,7 @@ function updatePreview() {
         }
     }
 
+    // Update Education
     const educationInputs = document.querySelectorAll('#education input');
     const previewEducation = document.getElementById('preview-education');
     previewEducation.innerHTML = '';
@@ -112,7 +102,7 @@ function displayProfilePicture(event) {
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            profilePictureDisplay.innerHTML = `<img src="${e.target.result}" alt="Profile Picture" class="rounded-picture">`;
+            profilePictureDisplay.src = e.target.result; // Set src directly to the image element
         };
         reader.readAsDataURL(file);
     }
@@ -133,3 +123,4 @@ downloadButton.addEventListener('click', function () {
     
     html2pdf().from(element).set(opt).save();
 });
+

@@ -13,28 +13,27 @@
         <!-- Basic Info Section -->
         <section class="section">
             <h2>Basic Information</h2>
-            <input type="text" id="name" placeholder="Name">
-            <input type="email" id="email" placeholder="Email">
-            <input type="text" id="contact" placeholder="Contact Number">
+            <input type="text" id="name" placeholder="Name" oninput="updatePreview()">
+            <input type="email" id="email" placeholder="Email" oninput="updatePreview()">
+            <input type="text" id="contact" placeholder="Contact Number" oninput="updatePreview()">
         </section>
 
         <section class="section">
             <h2>Upload Profile Picture</h2>
             <input type="file" id="profile-picture" accept="image/*" onchange="displayProfilePicture(event)">
         </section>
-        
 
         <!-- Career Objective Section -->
         <section class="section">
             <h2>Career Objective</h2>
-            <textarea id="careerObjective" placeholder="Describe your career objective..."></textarea>
+            <textarea id="careerObjective" placeholder="Describe your career objective..." oninput="updatePreview()"></textarea>
         </section>
 
         <!-- Skills Section -->
         <section class="section" id="skills-section">
             <h2>Skills</h2>
             <div id="skills">
-                <input type="text" placeholder="Skill">
+                <input type="text" placeholder="Skill" class="skill-input" oninput="updatePreview()">
             </div>
             <button onclick="addSkill()">Add More Skill</button>
         </section>
@@ -43,8 +42,8 @@
         <section class="section" id="experience-section">
             <h2>Experience</h2>
             <div id="experiences">
-                <input type="text" placeholder="Job Title">
-                <textarea placeholder="Describe your experience..."></textarea>
+                <input type="text" placeholder="Job Title" oninput="updatePreview()">
+                <textarea placeholder="Describe your experience..." oninput="updatePreview()"></textarea>
             </div>
             <button onclick="addExperience()">Add More Experience</button>
         </section>
@@ -53,49 +52,173 @@
         <section class="section" id="education-section">
             <h2>Education</h2>
             <div id="education">
-                <input type="text" placeholder="Degree">
-                <input type="text" placeholder="Institution">
+                <input type="text" placeholder="Degree" oninput="updatePreview()">
+                <input type="text" placeholder="Institution" oninput="updatePreview()">
             </div>
             <button onclick="addEducation()">Add More Education</button>
         </section>
 
-        <!-- Template Selection Section -->
+        <!-- Preview Section -->
         <section class="section">
-            <h2>Select a Template</h2>
-            <div id="templates">
-                <button onclick="selectTemplate('template1')">Template 1</button>
-                <button onclick="selectTemplate('template2')">Template 2</button>
-                <button onclick="selectTemplate('template3')">Template 3</button>
+            <h2>Resume Preview</h2>
+            <div id="resume-preview" class="template1-preview">
+                <div class="resume">
+                    <!-- Left Panel -->
+                    <div class="left-panel">
+                        <img id="profile-picture-display" src="profile.jpg" alt="Profile Photo" class="profile-photo">
+
+                        <div class="section-title">Contact</div>
+                        <div class="content">
+                            <span id="preview-contact" contenteditable="true" oninput="syncInput('contact', 'preview-contact')">23-589-22-88</span><br>
+                            <span id="preview-email" contenteditable="true" oninput="syncInput('email', 'preview-email')">yourmail@gmail.com</span><br>
+                        </div>
+                        <div class="section-title">Education</div>
+                        <div id="preview-education" class="content" contenteditable="true"></div>
+                        <div class="section-title">Skills</div>
+                        <div id="preview-skills" class="content" contenteditable="true"></div>
+                    </div>
+
+                    <!-- Right Panel -->
+                    <div class="right-panel">
+                        <div id="preview-name" class="name" contenteditable="true" oninput="syncInput('name', 'preview-name')">Your Name</div>
+                        <div class="career">
+                            <div class="section-title">Career Objective</div>
+                            <div id="preview-careerObjective" class="content" contenteditable="true" oninput="syncInput('careerObjective', 'preview-careerObjective')"></div>
+                        </div>
+                        <div class="experience">
+                            <div class="section-title">Professional Experience</div>
+                            <ul id="preview-experience" contenteditable="true"></ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
-       
-            <!-- Preview Section -->
-            <section class="section">
-                <h2>Resume Preview</h2>
-                <div id="resume-preview" class="template1-preview">
-                    <!-- Profile Picture Display -->
-                    <div id="profile-picture-display" class="profile-picture"></div>
-                    
-                    <p><strong>Career Objective:</strong> <span id="preview-careerObjective"></span></p>
-                    <p><strong>Name:</strong> <span id="preview-name"></span></p>
-                    <p><strong>Email:</strong> <span id="preview-email"></span></p>
-                    <p><strong>Contact:</strong> <span id="preview-contact"></span></p>
-                    <p><strong>Education:</strong> <span id="preview-education"></span></p>
-                    <p><strong>Skills:</strong> <span id="preview-skills"></span></p>
-                    <p><strong>Experience:</strong> <span id="preview-experience"></span></p>
-                    
-                    
-                    <!-- Add more fields as needed -->
-                </div>
-            </section>
-            
-            <button id="download-pdf">Download as PDF</button>
-        </div>
+        <button id="download-pdf">Download as PDF</button>
     </div>
 
-    <!-- <script src="jspdf.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
     <script src="builder.js"></script>
+
+    <script>
+        // Add Skill
+        function addSkill() {
+            const skillsSection = document.getElementById('skills');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = 'Skill';
+            input.classList.add('skill-input');
+            skillsSection.appendChild(input);
+            input.addEventListener('input', updatePreview);
+        }
+
+        // Add Experience
+        function addExperience() {
+            const experiencesSection = document.getElementById('experiences');
+            const titleInput = document.createElement('input');
+            titleInput.type = 'text';
+            titleInput.placeholder = 'Job Title';
+            const descriptionTextarea = document.createElement('textarea');
+            descriptionTextarea.placeholder = 'Describe your experience...';
+            experiencesSection.appendChild(titleInput);
+            experiencesSection.appendChild(descriptionTextarea);
+            titleInput.addEventListener('input', updatePreview);
+            descriptionTextarea.addEventListener('input', updatePreview);
+        }
+
+        // Add Education
+        function addEducation() {
+            const educationSection = document.getElementById('education');
+            const degreeInput = document.createElement('input');
+            degreeInput.type = 'text';
+            degreeInput.placeholder = 'Degree';
+            const institutionInput = document.createElement('input');
+            institutionInput.placeholder = 'Institution';
+            educationSection.appendChild(degreeInput);
+            educationSection.appendChild(institutionInput);
+            degreeInput.addEventListener('input', updatePreview);
+            institutionInput.addEventListener('input', updatePreview);
+        }
+
+        // Sync editable preview content with form input
+        function syncInput(inputId, previewId) {
+            document.getElementById(inputId).value = document.getElementById(previewId).textContent;
+        }
+
+        // Update Preview Content
+        function updatePreview() {
+            document.getElementById('preview-name').textContent = document.getElementById('name').value;
+            document.getElementById('preview-email').textContent = document.getElementById('email').value;
+            document.getElementById('preview-contact').textContent = document.getElementById('contact').value;
+            document.getElementById('preview-careerObjective').textContent = document.getElementById('careerObjective').value;
+
+            // Update Skills
+            const skillInputs = document.querySelectorAll('#skills .skill-input');
+            const previewSkills = document.getElementById('preview-skills');
+            previewSkills.innerHTML = '';
+            skillInputs.forEach(input => {
+                if (input.value) {
+                    const li = document.createElement('li');
+                    li.textContent = input.value;
+                    previewSkills.appendChild(li);
+                }
+            });
+
+            // Update Experience
+            const experienceInputs = document.querySelectorAll('#experiences input, #experiences textarea');
+            const previewExperience = document.getElementById('preview-experience');
+            previewExperience.innerHTML = '';
+            for (let i = 0; i < experienceInputs.length; i += 2) {
+                const jobTitle = experienceInputs[i].value;
+                const jobDescription = experienceInputs[i + 1].value;
+                if (jobTitle || jobDescription) {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<strong>${jobTitle}</strong><br>${jobDescription}`;
+                    previewExperience.appendChild(li);
+                }
+            }
+
+            // Update Education
+            const educationInputs = document.querySelectorAll('#education input');
+            const previewEducation = document.getElementById('preview-education');
+            previewEducation.innerHTML = '';
+            for (let i = 0; i < educationInputs.length; i += 2) {
+                const degree = educationInputs[i].value;
+                const institution = educationInputs[i + 1].value;
+                if (degree || institution) {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<strong>${degree}</strong> - ${institution}`;
+                    previewEducation.appendChild(li);
+                }
+            }
+        }
+
+        // Display Uploaded Profile Picture
+        function displayProfilePicture(event) {
+            const profilePictureDisplay = document.getElementById('profile-picture-display');
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profilePictureDisplay.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Download PDF using html2pdf
+        const downloadButton = document.getElementById('download-pdf');
+        downloadButton.addEventListener('click', function () {
+            const element = document.getElementById('resume-preview');
+            const opt = {
+                margin: 1,
+                filename: 'resume.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        });
+    </script>
 </body>
 </html>
