@@ -31,10 +31,16 @@ body, html {
   font-size: 1.2em;
   color: #fff;
   background-color: #7f163e;
-  border: none;
+  border-radius: 15px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.1s;
+  
+    
+    
+    
 }
+
+
 
 .landing-page button:hover {
   background-color: #763085;
@@ -160,4 +166,12 @@ ul {
   align-self: center; /* aligns button to the start */
   padding: 3px 3px;
   margin-top: 1px;
+}
+ /* heropic */
+ .profile-picture {
+  display: block;
+  margin: 10px auto;
+  width: 500px;
+  height: auto;
+  border-radius: 50%; /* Makes the image circular */
 }
